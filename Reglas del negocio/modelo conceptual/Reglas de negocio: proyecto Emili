@@ -1,0 +1,51 @@
+Reglas de negocio: proyecto Emili
+
+- Regitrar iglesias con su nombre, direccion, fecha de creación, correo.
+
+- Registrar equipos, nombre, descripcion, correo.
+
+- Registrar miembros de la iglesia, datos personales, fecha de ingreso, equipo, direccion, correo, estado civil.
+
+- Algunos miembros tienen un rango (Apostol, profeta, evangelista, maestros, Pastor).
+
+- El Rango debe tener nombre y posible descripcion.
+
+- crear usuarios, nombre usuario, password, estado.
+
+- Los usuarios deben tener un rol.
+
+- Un rol esta compuesto por su nombre y descripcion.
+
+- Registrar tareas, descripción, equipos, miembros, fecha inicio, fecha culminación (posible modulo futuro). 
+
+- Las tareas pueden tener sub tareas con, descripción, equipos, miembros, fecha inicio, fecha culminación (posible modulo futuro).
+
+- Las tareas deben tener estatus (posible modulo futuro).
+
+- Registrar actividades de la iglesia, nombre, descripcion.
+
+- Los usuarios pueden comprobar asistencia (asistire, tal vez, no asistire).
+
+- Publicar Posts, imagen, video, descripción, etiquetas, actividades.
+
+- Las actividades publicadas en post deben tener fecha inicio, hora inicio, fecha culminacion, hora culminacion, estado, lugar.
+
+- Los usuarios pueden comentar las publicaciones.
+
+- Los usuarios pueden reaccionar a las publicaciones (posible modulo futuro).
+
+- Las reaciones tienen nombre, id, imagen.
+
+- Se deve llevar seguimiento de las actividates.
+
+- Registro de asistencia a las actividades, datos de los miembros participantes.
+
+- estadisticas de asistencia por semana, mes y año.
+
+- estadisticas de crecimiento en la población por semana, mes y año.
+
+
+posibles roles de usuarios: administrador, administrador por iglesia, blogger, corriente. 
+
+
+
