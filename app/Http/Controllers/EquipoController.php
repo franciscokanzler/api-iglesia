@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Iglesia;
+use App\Models\Equipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class IglesiaController extends Controller
+class EquipoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,12 +37,17 @@ class IglesiaController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required|unique:iglesias',
-            'correo' => 'required|email|unique:iglesias',
-            'fecha_creacion' => 'date',
+            'descripcion' => 'required|string',
+            'nombre' => 'required|unique:equipos',
+            'correo' => 'required|email|unique:equipos',
+            'iglesia_id' => 'required|exists:iglesias,id',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $ErrorMessages = [
+            'iglesia_id.exists' => 'El iglesia_id es incorrecto ',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $ErrorMessages);
         if ($validator->fails()) {
             return response()->json([
                 'created' => false,
@@ -50,10 +55,10 @@ class IglesiaController extends Controller
             ], 400);
         }
 
-        $iglesia = Iglesia::create($request->all());
+        $equipo = Equipo::create($request->all());
 
         return response()->json([
-            'data' => $iglesia,
+            'data' => $equipo,
         ], 200);
     }
 

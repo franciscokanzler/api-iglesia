@@ -18,6 +18,11 @@ return new class extends Migration
             $table->string('correo',45)->unique()->nullable();
             $table->text('descripcion');
             $table->string('nombre',45);
+
+            $table->unsignedBigInteger('iglesia_id');
+
+            $table->foreign('iglesia_id')->references('id')->on('iglesias')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

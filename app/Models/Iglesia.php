@@ -9,13 +9,15 @@ class Iglesia extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];//se agregan campos protegidos
+
     //Relacion de uno a muchos
     public function miembros(){
         return $this->hasMany('App\Models\Miembros');
     }
 
-    //Relacion de muchos a muchos
+    //Relacion de uno a muchos
     public function equipos(){
-        return $this->belongsToMany('App\Models\Equipo');
+        return $this->hasMany('App\Models\Equipo');
     }
 }

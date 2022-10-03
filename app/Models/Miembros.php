@@ -21,7 +21,7 @@ class Miembros extends Model
 
     //Relacion de uno a muchos inversa
     public function estado_civil(){
-        return $this->belongsTo('App\Models\Estado_Civil');
+        return $this->belongsTo('App\Models\EstadoCivil');
     }
 
     //Relacion de uno a muchos inversa

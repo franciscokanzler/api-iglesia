@@ -9,13 +9,15 @@ class Equipo extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //Relacion de muchos a muchos
     public function miembros(){
         return $this->belongsToMany('App\Models\Miembros');
     }
 
-    //Relacion de muchos a muchos
+    //Relacion de uno a muchos inversa
     public function iglesia(){
-        return $this->belongsToMany('App\Models\Iglesia');
+        return $this->belongsTo('App\Models\Iglesia');
     }
 }

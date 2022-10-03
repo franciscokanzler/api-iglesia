@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Iglesia;
+use App\Models\Rango;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class IglesiaController extends Controller
+class RangoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,12 +37,15 @@ class IglesiaController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required|unique:iglesias',
-            'correo' => 'required|email|unique:iglesias',
-            'fecha_creacion' => 'date',
+            'nombre' => 'required|unique:rangos',
+            'descripcion' => 'string',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $ErrorMessages = [
+            'nombre.required' => 'El nombre es requerido ',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $ErrorMessages);
         if ($validator->fails()) {
             return response()->json([
                 'created' => false,
@@ -50,10 +53,10 @@ class IglesiaController extends Controller
             ], 400);
         }
 
-        $iglesia = Iglesia::create($request->all());
+        $rango = Rango::create($request->all());
 
         return response()->json([
-            'data' => $iglesia,
+            'data' => $rango,
         ], 200);
     }
 

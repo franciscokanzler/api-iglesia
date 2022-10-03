@@ -9,6 +9,8 @@ class Rango extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //Relacion de uno a muchos
     public function miembros(){
         return $this->hasMany('App\Models\Iglesia');
