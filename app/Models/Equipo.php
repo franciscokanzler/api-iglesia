@@ -13,7 +13,7 @@ class Equipo extends Model
 
     //Relacion de muchos a muchos
     public function miembros(){
-        return $this->belongsToMany('App\Models\Miembros');
+        return $this->belongsToMany('App\Models\Miembros', 'equipo_miembros', 'equipo_id', 'miembro_id');
     }
 
     //Relacion de uno a muchos inversa

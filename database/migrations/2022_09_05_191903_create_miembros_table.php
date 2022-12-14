@@ -26,16 +26,16 @@ return new class extends Migration
             $table->string('calle',45)->nullable();
             $table->integer('id_representante')->nullable();
 
-            $table->unsignedBigInteger('iglesia_id')->nullable();
+            $table->unsignedBigInteger('iglesia_id');
             $table->unsignedBigInteger('rango_id')->nullable();
             $table->unsignedBigInteger('estado_civil_id')->nullable();
             $table->unsignedBigInteger('estado_id');
             $table->unsignedBigInteger('municipio_id');
             $table->unsignedBigInteger('parroquia_id');
 
-            $table->foreign('iglesia_id')->references('id')->on('iglesias')->onDelete('set null');
+            $table->foreign('iglesia_id')->references('id')->on('iglesias')->onDelete('cascade');
             $table->foreign('rango_id')->references('id')->on('rangos')->onDelete('set null');
-            $table->foreign('estado_civil_id')->references('id')->on('estados_civiles')->onDelete('set null');
+            $table->foreign('estado_civil_id')->references('id')->on('ciudadanos')->onDelete('set null');
             /* $table->foreign('estado_id')->references('id')->on('estados');
             $table->foreign('municipio_id')->references('id')->on('municipios');
             $table->foreign('parroquia_id')->references('id')->on('parroquias'); */

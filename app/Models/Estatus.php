@@ -9,6 +9,10 @@ class Estatus extends Model
 {
     use HasFactory;
 
+    protected $table = "estatus";
+    protected $primaryKey = "id";
+    protected $guarded = [];
+
     //Relacion de uno a muchos
     public function user(){
         return $this->hasMany('App\Models\User');

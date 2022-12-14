@@ -15,7 +15,10 @@ class IglesiaController extends Controller
      */
     public function index()
     {
-        //
+        $iglesia = Iglesia::all();
+        return response()->json([
+            'data' => $iglesia,
+        ], 200);
     }
 
     /**
@@ -76,7 +79,10 @@ class IglesiaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $iglesia = Iglesia::where('id',$id)->get();
+        return response()->json([
+            'data' => $iglesia,
+        ], 200);
     }
 
     /**
@@ -86,9 +92,27 @@ class IglesiaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Iglesia $iglesia)
     {
-        //
+        $rules = [
+            'nombre' => 'required|unique:iglesias',
+            'correo' => 'required|email',
+            'fecha_creacion' => 'date',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'created' => false,
+                'errors'  => $validator->errors()
+            ], 400);
+        }
+
+        $iglesia->update($request->all());
+
+        return response()->json([
+            'data' => $iglesia,
+        ], 200);
     }
 
     /**
@@ -97,8 +121,11 @@ class IglesiaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Iglesia $iglesia)
     {
-        //
+        $iglesia->delete();
+        return response()->json([
+            'data' => $iglesia,
+        ], 200);
     }
 }

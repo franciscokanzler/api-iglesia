@@ -22,11 +22,11 @@ return new class extends Migration
             $table->rememberToken();
 
             $table->unsignedBigInteger('miembro_id')->unique();
-            $table->unsignedBigInteger('role_id')->unique();
+            /* $table->unsignedBigInteger('role_id')->unique(); */
             $table->unsignedBigInteger('estatus_id')->unique();
 
             $table->foreign('miembro_id')->references('id')->on('miembros')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles');
+            /* $table->foreign('role_id')->references('id')->on('roles'); */
             $table->foreign('estatus_id')->references('id')->on('estatus');
 
             $table->timestamps();

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EstadoCivil extends Model
+class Ciudadano extends Model
 {
     use HasFactory;
-    protected $table = 'estados_civiles';
+    /* protected $table = 'estadosciviles'; */
     protected $guarded = [];
 
     //Relacion de uno a muchos
     public function miembros(){
-        return $this->hasMany('App\Models\Iglesia');
+        return $this->hasMany('App\Models\Miembros');
     }
 }

@@ -9,6 +9,8 @@ class Miembros extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //Relacion de uno a muchos inversa
     public function iglesia(){
         return $this->belongsTo('App\Models\Iglesia');
@@ -21,7 +23,7 @@ class Miembros extends Model
 
     //Relacion de uno a muchos inversa
     public function estado_civil(){
-        return $this->belongsTo('App\Models\EstadoCivil');
+        return $this->belongsTo('App\Models\Ciudadano');
     }
 
     //Relacion de uno a muchos inversa

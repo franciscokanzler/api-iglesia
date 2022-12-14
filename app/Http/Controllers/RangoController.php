@@ -15,7 +15,10 @@ class RangoController extends Controller
      */
     public function index()
     {
-        //
+        $rango = Rango::all();
+        return response()->json([
+            'data' => $rango,
+        ], 200);
     }
 
     /**
@@ -79,7 +82,10 @@ class RangoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $rango = Rango::where('id',$id)->get();
+        return response()->json([
+            'data' => $rango,
+        ], 200);
     }
 
     /**
@@ -89,9 +95,30 @@ class RangoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Rango $rango)
     {
-        //
+        $rules = [
+            'nombre' => 'required|unique:rangos',
+            'descripcion' => 'string',
+        ];
+
+        $ErrorMessages = [
+            'nombre.required' => 'El nombre es requerido ',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $ErrorMessages);
+        if ($validator->fails()) {
+            return response()->json([
+                'created' => false,
+                'errors'  => $validator->errors()
+            ], 400);
+        }
+
+        $rango->update($request->all());
+
+        return response()->json([
+            'data' => $rango,
+        ], 200);
     }
 
     /**
@@ -100,8 +127,11 @@ class RangoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Rango $rango)
     {
-        //
+        $rango->delete();
+        return response()->json([
+            'data' => $rango,
+        ], 200);
     }
 }
