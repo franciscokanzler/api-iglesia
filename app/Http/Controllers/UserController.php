@@ -12,19 +12,33 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     public function login(Request $request){
-        $credentials = $request->validate([
-            'email' => ['required','email'],
-            'password' => ['required'],
-        ]);
+        $rules = [
+            'email' => 'required',
+            'password' => 'required',
+        ];
 
-        if(Auth::attempt($credentials)){
+        $ErrorMessages = [
+            'nombre.required' => 'El nombre es requerido ',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $ErrorMessages);
+        if ($validator->fails()) {
+            return response()->json([
+                'created' => false,
+                'errors'  => $validator->errors()
+            ], 400);
+        }
+        if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
             $user = Auth::user();
             $token = $user->createToken('token')->plainTextToken;
-            return response(['token'=>$token],Response::HTTP_OK);
+            return response()->json([
+                'token' => $token,
+            ], 200);
+            /* return response(['token'=>$token],Response::HTTP_OK); */
         }else{
             return response()->json([
                 'mensaje' => 'Credenciales Inválidas',
-            ], 200);
+            ], 400);
             /* return response(['mensaje'=>'Credenciales Inválidas'],Response::HTTP_UNAUTHORIZED); */
         }
     }
