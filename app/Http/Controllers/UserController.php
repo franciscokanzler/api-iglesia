@@ -5,10 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Miembros;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    public function login(Request $request){
+        $credentials = $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required'],
+        ]);
+
+        if(Auth::attempt($credentials)){
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            return response(['token'=>$token],Response::HTTP_OK);
+        }else{
+            return response()->json([
+                'mensaje' => 'Credenciales Inválidas',
+            ], 200);
+            /* return response(['mensaje'=>'Credenciales Inválidas'],Response::HTTP_UNAUTHORIZED); */
+        }
+    }
+
     public function index(){
         $usuarios = User::all();
         return response()->json([
@@ -41,7 +61,14 @@ class UserController extends Controller
             ], 400);
         }
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request['name'],
+            'email'=> $request['email'],
+            'password'=> bcrypt($request['password']),
+            'miembro_id' => $request['miembro_id'],
+            'estatus_id'=> $request['estatus_id'],
+            'role_id'=> $request['role_id'],
+        ]);
 
         return response()->json([
             'data' => $user,
@@ -84,5 +111,12 @@ class UserController extends Controller
             'usuario' => $usuario,
         ], 200);
 
+    }
+
+    public function logout(){
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'mensaje' => 'cierre de sesion exitoso',
+        ], 200);
     }
 }

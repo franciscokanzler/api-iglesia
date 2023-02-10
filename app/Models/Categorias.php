@@ -9,6 +9,8 @@ class Categorias extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //Relacion de uno a muchos
     public function actividades(){
         return $this->hasMany('App\Models\Actividades');

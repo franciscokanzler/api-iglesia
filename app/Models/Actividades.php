@@ -9,15 +9,24 @@ class Actividades extends Model
 {
     use HasFactory;
 
+    protected $table = "actividades";
+    protected $primaryKey = "id";
+    protected $guarded = [];
+
     //Relacion de uno a muchos inversa
     public function categorias(){
         return $this->belongsTo('App\Models\Categorias');
     }
 
-    //Relacion de muchos a muchos
+    //Relacion de uno a muchos inversa
     public function post(){
-        return $this->belongsToMany('App\Models\Post');
+        return $this->belongsTo('App\Models\Post');
     }
+
+    //Relacion de muchos a muchos
+    /* public function post(){
+        return $this->belongsToMany('App\Models\Post');
+    } */
 
      //Relacion de uno a muchos inversa
      public function estatus(){

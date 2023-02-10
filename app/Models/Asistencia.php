@@ -9,6 +9,8 @@ class Asistencia extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //Relacion de uno a muchos inversa
     public function actividad(){
         return $this->belongsTo('App\Models\Actividades');

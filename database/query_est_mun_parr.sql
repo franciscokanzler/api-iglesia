@@ -5,7 +5,34 @@ CREATE TABLE IF NOT EXISTS `estados` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
-INSERT INTO `estados` (`nombre`) VALUES
+INSERT INTO `estados` (`id`, `nombre`) VALUES
+(1, 'Amazonas'),
+(2, 'Anzoátegui'),
+(3, 'Apure'),
+(4, 'Aragua'),
+(5, 'Barinas'),
+(6, 'Bolívar'),
+(7, 'Carabobo'),
+(8, 'Cojedes'),
+(9, 'Delta Amacuro'),
+(10, 'Falcón'),
+(11, 'Guárico'),
+(12, 'Lara'),
+(13, 'Mérida'),
+(14, 'Miranda'),
+(15, 'Monagas'),
+(16, 'Nueva Esparta'),
+(17, 'Portuguesa'),
+(18, 'Sucre'),
+(19, 'Táchira'),
+(20, 'Trujillo'),
+(21, 'La Guaira'),
+(22, 'Yaracuy'),
+(23, 'Zulia'),
+(24, 'Distrito Capital'),
+(25, 'Dependencias Federales');
+
+/* INSERT INTO `estados` (`nombre`) VALUES
 ('Amazonas'),
 ('Anzoátegui'),
 ('Apure'),
@@ -30,7 +57,7 @@ INSERT INTO `estados` (`nombre`) VALUES
 ('Yaracuy'),
 ('Zulia'),
 ('Distrito Capital'),
-('Dependencias Federales');
+('Dependencias Federales'); */
 
 CREATE TABLE IF NOT EXISTS `municipios` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

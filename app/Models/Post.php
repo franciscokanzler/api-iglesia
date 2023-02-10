@@ -9,6 +9,9 @@ class Post extends Model
 {
     use HasFactory;
 
+   /*  protected $guarded = []; */
+    protected $fillable = ['descripcion','user_id'];
+
     //Relacion de uno a muchos inversa
     public function user(){
         return $this->belongsTo('App\Models\User');
@@ -24,8 +27,18 @@ class Post extends Model
         return $this->hasMany('App\Models\Comentario');
     }
 
-    //Relacion de muchos a muchos
-    public function actividades(){
-        return $this->belongsToMany('App\Models\Actividades');
+    //Relacion de uno a muchos
+    public function video(){
+        return $this->hasMany('App\Models\Video');
     }
+
+    //Relacion de uno a muchos
+    public function actividades(){
+        return $this->hasMany('App\Models\Actividades');
+    }
+
+    //Relacion de muchos a muchos
+    /* public function actividades(){
+        return $this->belongsToMany('App\Models\Actividades');
+    } */
 }
