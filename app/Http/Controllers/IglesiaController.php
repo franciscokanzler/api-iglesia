@@ -40,7 +40,7 @@ class IglesiaController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required|unique:iglesias',
+            'nombre' => 'required',
             'correo' => 'required|email|unique:iglesias',
             'fecha_creacion' => 'date',
         ];
@@ -95,7 +95,7 @@ class IglesiaController extends Controller
     public function update(Request $request, Iglesia $iglesia)
     {
         $rules = [
-            'nombre' => 'required|unique:iglesias',
+            'nombre' => 'required',
             'correo' => 'required|email',
             'fecha_creacion' => 'date',
         ];
