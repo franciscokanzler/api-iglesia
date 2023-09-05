@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class MiembroController extends Controller
 {
     public function index(){
-        $miembros = Miembros::all();
+        $miembros = Miembros::with('iglesia')->get();
         return response()->json([
             'miembros' => $miembros,
         ], 200);
