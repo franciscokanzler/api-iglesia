@@ -1,9 +1,9 @@
--- Active: 1662388702162@@127.0.0.1@3306@db
+-- Active: 1676066672136@@127.0.0.1@3306@iglesia
 CREATE TABLE IF NOT EXISTS `estados` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(250) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `estados` (`id`, `nombre`) VALUES
 (1, 'Amazonas'),
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `municipios` (
   `nombre` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_estado` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=463 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `municipios` (`id_estado`, `nombre`) VALUES
 (1, 'Alto Orinoco'),
@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `parroquias` (
   `nombre` varchar(250) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_municipio` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1139 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `parroquias` (`id_municipio`, `nombre`) VALUES
 (1, 'Alto Orinoco'),
