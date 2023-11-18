@@ -54,33 +54,19 @@ class MiembroController extends Controller
         $date = Carbon::parse($request->fecha_nacimiento);
         $request['edad'] = Carbon::createFromDate($date)->age;
         /* dd($request->all()); */
-        if ($request->ci) {
-            $rules = [
-                'nombre' => 'required',
-                'apellido' => 'required',
-                'correo' => 'email|unique:miembros',
-                'fecha_nacimiento' => 'required|date',
-                'edad' => 'required|integer',
-                'iglesia_id' => 'required|integer',
-                'estado_civil_id' => 'integer',
-                'estado_id' => 'required|integer',
-                'municipio_id' => 'required|integer',
-                'parroquia_id' => 'required|integer',
-            ];
-        }else{
-            $rules = [
-                'nombre' => 'required',
-                'apellido' => 'required',
-                'correo' => 'email|unique:miembros',
-                'fecha_nacimiento' => 'required|date',
-                'edad' => 'required|integer',
-                'iglesia_id' => 'required|integer',
-                'id_representante' => 'required|integer',
-                'estado_id' => 'required|integer',
-                'municipio_id' => 'required|integer',
-                'parroquia_id' => 'required|integer',
-            ];
-        }
+        $rules = [
+            'nombre' => 'required',
+            'apellido' => 'required',
+            'correo' => 'email|unique:miembros',
+            'fecha_nacimiento' => 'required|date',
+            'edad' => 'required|integer',
+            'iglesia_id' => 'required|integer',
+            'estado_id' => 'required|integer',
+            'municipio_id' => 'required|integer',
+            'parroquia_id' => 'nullable|integer',
+            'id_representante' => 'nullable|numeric|required_without:ci|required_if:edad,<,18',
+            'estado_civil_id' => 'nullable|required_if:ci,!=,null|numeric',
+        ];
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -122,31 +108,19 @@ class MiembroController extends Controller
         $date = Carbon::parse($request->fecha_nacimiento);
         $request['edad'] = Carbon::createFromDate($date)->age;
         /* dd($request->all()); */
-        if ($request->ci) {
-            $rules = [
-                'nombre' => 'required',
-                'apellido' => 'required',
-                'fecha_nacimiento' => 'required|date',
-                'edad' => 'required|integer',
-                'iglesia_id' => 'required|integer',
-                'estado_civil_id' => 'integer',
-                'estado_id' => 'required|integer',
-                'municipio_id' => 'required|integer',
-                'parroquia_id' => 'required|integer',
-            ];
-        }else{
-            $rules = [
-                'nombre' => 'required',
-                'apellido' => 'required',
-                'fecha_nacimiento' => 'required|date',
-                'edad' => 'required|integer',
-                'iglesia_id' => 'required|integer',
-                'id_representante' => 'required|integer',
-                'estado_id' => 'required|integer',
-                'municipio_id' => 'required|integer',
-                'parroquia_id' => 'required|integer',
-            ];
-        }
+        $rules = [
+            'nombre' => 'required',
+            'apellido' => 'required',
+            'correo' => 'email|unique:miembros',
+            'fecha_nacimiento' => 'required|date',
+            'edad' => 'required|integer',
+            'iglesia_id' => 'required|integer',
+            'estado_id' => 'required|integer',
+            'municipio_id' => 'required|integer',
+            'parroquia_id' => 'required|integer',
+            'id_representante' => 'required_if:ci,null|integer',
+            'estado_civil_id' => 'required_if:ci,!=,null|integer',
+        ];
 
         $ErrorMessages = [
             'nombre.required' => 'El nombre es requerido ',

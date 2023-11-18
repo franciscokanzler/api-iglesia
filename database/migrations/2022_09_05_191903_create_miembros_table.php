@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('fecha_nacimiento');
             $table->string('ci',45)->unique()->nullable();
             $table->integer('edad');
-            $table->string('telefono',10)->nullable();
+            $table->string('telefono',12)->nullable();
             $table->string('correo',45)->unique()->nullable();
             $table->integer('nro_casa')->nullable();
             $table->string('calle',45)->nullable();
@@ -31,14 +31,14 @@ return new class extends Migration
             $table->unsignedBigInteger('estado_civil_id')->nullable();
             $table->unsignedBigInteger('estado_id');
             $table->unsignedBigInteger('municipio_id');
-            $table->unsignedBigInteger('parroquia_id');
+            $table->unsignedBigInteger('parroquia_id')->nullable();
 
             $table->foreign('iglesia_id')->references('id')->on('iglesias')->onDelete('cascade');
             $table->foreign('rango_id')->references('id')->on('rangos')->onDelete('set null');
             $table->foreign('estado_civil_id')->references('id')->on('ciudadanos')->onDelete('set null');
-            /* $table->foreign('estado_id')->references('id')->on('estados');
+            $table->foreign('estado_id')->references('id')->on('estados');
             $table->foreign('municipio_id')->references('id')->on('municipios');
-            $table->foreign('parroquia_id')->references('id')->on('parroquias'); */
+            $table->foreign('parroquia_id')->references('id')->on('parroquias');
 
             $table->timestamps();
         });

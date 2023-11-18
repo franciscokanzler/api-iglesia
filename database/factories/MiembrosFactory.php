@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Estado;
 use App\Models\Iglesia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,14 @@ class MiembrosFactory extends Factory
     public function definition()
     {
         $iglesia_id = Iglesia::orderByRaw("RAND()")->limit(1)->pluck("id");
+        $estado = Estado::find($this->faker->numberBetween(1, 25));
+        $municipio = $estado->municipios->random();
+        if ($municipio->parroquias->isNotEmpty()) {
+            $parroquia = $municipio->parroquias->random();
+        } else {
+            $parroquia = NULL;
+        }
+
         return [
             'nombre' => $this->faker->sentence(1),
             'apellido' => $this->faker->sentence(1),
@@ -26,9 +35,9 @@ class MiembrosFactory extends Factory
             'edad' => $this->faker->numberBetween(21,80),
             'iglesia_id' => $iglesia_id[0],
             'correo' => $this->faker->unique()->safeEmail,
-            'estado_id' => 1,
-            'municipio_id' => 2,
-            'parroquia_id' => 3
+            'estado_id' => $estado->id,
+            'municipio_id' => $municipio->id,
+            'parroquia_id' => $parroquia->id,
         ];
     }
 }

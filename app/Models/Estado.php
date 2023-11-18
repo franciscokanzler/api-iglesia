@@ -13,4 +13,9 @@ class Estado extends Model
     public function miembros(){
         return $this->hasMany('App\Models\Iglesia');
     }
+
+    public function municipios()
+    {
+        return $this->hasMany('App\Models\Municipio');
+    }
 }
