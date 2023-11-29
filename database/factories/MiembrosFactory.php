@@ -19,7 +19,7 @@ class MiembrosFactory extends Factory
     public function definition()
     {
         $iglesia_id = Iglesia::orderByRaw("RAND()")->limit(1)->pluck("id");
-        $estado = Estado::find($this->faker->numberBetween(1, 25));
+        $estado = Estado::find($this->faker->numberBetween(1, 24));
         $municipio = $estado->municipios->random();
         if ($municipio->parroquias->isNotEmpty()) {
             $parroquia = $municipio->parroquias->random();
@@ -31,7 +31,7 @@ class MiembrosFactory extends Factory
             'nombre' => $this->faker->sentence(1),
             'apellido' => $this->faker->sentence(1),
             'fecha_nacimiento' => $this->faker->date(),
-            'ci' => $this->faker->numberBetween(5000000,23000000),
+            'ci' => "V-".$this->faker->numberBetween(5000000,23000000),
             'edad' => $this->faker->numberBetween(21,80),
             'iglesia_id' => $iglesia_id[0],
             'correo' => $this->faker->unique()->safeEmail,

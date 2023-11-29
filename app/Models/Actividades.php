@@ -29,7 +29,7 @@ class Actividades extends Model
     } */
 
      //Relacion de uno a muchos inversa
-     public function estatus(){
+    public function estatus(){
         return $this->belongsTo('App\Models\Estatus');
     }
 

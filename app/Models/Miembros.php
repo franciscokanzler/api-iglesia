@@ -38,7 +38,7 @@ class Miembros extends Model
 
     //Relacion de uno a muchos inversa
     public function parroquia(){
-        return $this->belongsTo('App\Models\Parroqui');
+        return $this->belongsTo('App\Models\Parroquia');
     }
 
     //Relacion de muchos a muchos

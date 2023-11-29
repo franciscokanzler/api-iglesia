@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::resource('ciudadanos', CiudadanoController::class)->except('show','create')->names('ciudadanos');
 
     Route::resource('miembros', MiembroController::class)->except('show')->names('miembros');
+    Route::get('representante/{id}', [MiembroController::class, "representante"])->name('representante');
     Route::get('municipios/{id}', [MiembroController::class, "municipios"])->name('municipios');
     Route::get('parroquias/{id}', [MiembroController::class, "parroquias"])->name('parroquias');
 
