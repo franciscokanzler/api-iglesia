@@ -20,4 +20,9 @@ class Equipo extends Model
     public function iglesia(){
         return $this->belongsTo('App\Models\Iglesia');
     }
+
+    //Relacion de uno a uno inverso
+    public function imagen(){
+        return $this->belongsTo('App\Models\Imagen');
+    }
 }

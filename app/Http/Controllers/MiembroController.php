@@ -12,17 +12,42 @@ use App\Models\Rango;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class MiembroController extends Controller
 {
-    public function index(){
-        $miembros = Miembros::with('iglesia')->get();
-        return response()->json([
-            'miembros' => $miembros,
-        ], 200);
+    public function index(Request $request)
+    {
+        $columna = $request->columna ?? 'miembros.id';
+        $orden = $request->orden ?? 'asc';
+        $nro = $request->nro ?? 5;
+
+        try {
+            $miembrosQuery = Miembros::join('iglesias', 'miembros.iglesia_id', '=', 'iglesias.id')
+                ->select('miembros.*', 'iglesias.nombre as nombre_iglesia')
+                ->orderBy($columna, $orden);
+
+            if ($request->filtro != "" && $request->valor != "") {
+                $miembrosQuery->where($request->filtro, 'LIKE', "%{$request->valor}%");
+            }
+
+            $miembros = $miembrosQuery->paginate($nro);
+
+            return response()->json([
+                'data' => $miembros,
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error función miembro.index: ' . $th->getMessage());
+            Log::error('Archivo: ' . $th->getFile());
+            Log::error('Línea: ' . $th->getLine());
+            return response()->json([
+                'errors'  => 'Estimado usuario, en estos momentos no se puede procesar su solicitud'
+            ], 400);
+        }
     }
 
-    public function create(){
+    public function create()
+    {
         $iglesia = Iglesia::all();
         $rango = Rango::all();
         $EstadoCivil = Ciudadano::all();
@@ -35,22 +60,25 @@ class MiembroController extends Controller
         ], 200);
     }
 
-    public function municipios($id){
-        $municipio = Municipio::where('estado_id',$id)->get();
+    public function municipios($id)
+    {
+        $municipio = Municipio::where('estado_id', $id)->get();
         return response()->json([
             'municipio' => $municipio,
         ], 200);
     }
 
-    public function parroquias($id){
-        $parroquia = Parroquia::where('municipio_id',$id)->get();
+    public function parroquias($id)
+    {
+        $parroquia = Parroquia::where('municipio_id', $id)->get();
         return response()->json([
             'parroquia' => $parroquia,
         ], 200);
     }
 
-    public function representante($ci){
-        $representante = Miembros::where('ci',$ci)->with('iglesia')->first();
+    public function representante($ci)
+    {
+        $representante = Miembros::where('ci', $ci)->with('iglesia')->first();
         return response()->json([
             'representante' => $representante,
         ], 200);
@@ -60,6 +88,7 @@ class MiembroController extends Controller
     {
         $date = Carbon::parse($request->fecha_nacimiento);
         $request['edad'] = Carbon::createFromDate($date)->age;
+
         /* dd($request->all()); */
         $rules = [
             'nombre' => 'required',
@@ -104,34 +133,44 @@ class MiembroController extends Controller
             'parroquia_id.numeric' => 'Estimado usuario, el valor del campo Parroquia es incorrecto.',
         ];
 
-        $validator = Validator::make($request->all(), $rules,$ErrorMessages);
+        $validator = Validator::make($request->all(), $rules, $ErrorMessages);
         if ($validator->fails()) {
             return response()->json([
                 'created' => false,
                 'errors'  => $validator->errors()
             ], 400);
         }
+        try {
+            $miembro = Miembros::create($request->all());
 
-        $miembro = Miembros::create($request->all());
-
-        return response()->json([
-            'data' => $miembro,
-        ], 200);
+            return response()->json([
+                'data' => $miembro,
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error función miembro.store: ' . $th->getMessage());
+            Log::error('Archivo: ' . $th->getFile());
+            Log::error('Línea: ' . $th->getLine());
+            return response()->json([
+                'errors'  => 'Estimado usuario, en estos momentos no se puede procesar su solicitud'
+            ], 400);
+        }
     }
 
     public function edit($id)
     {
-        $miembro = Miembros::where('id',$id)
-                            ->with('iglesia',
-                                'rango',
-                                'estado_civil',
-                                'estado',
-                                'municipio',
-                                'parroquia')
-                            ->first();
+        $miembro = Miembros::where('id', $id)
+            ->with(
+                'iglesia',
+                'rango',
+                'estado_civil',
+                'estado',
+                'municipio',
+                'parroquia'
+            )
+            ->first();
 
         if ($miembro->edad < 18) {
-            $representante = Miembros::where('id',$miembro->id_representante)->with('iglesia')->first();
+            $representante = Miembros::where('id', $miembro->id_representante)->with('iglesia')->first();
             $miembro['representante'] = $representante;
         }
 
@@ -140,7 +179,8 @@ class MiembroController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, Miembros $miembro){
+    public function update(Request $request, Miembros $miembro)
+    {
 
         $date = Carbon::parse($request->fecha_nacimiento);
         $request['edad'] = Carbon::createFromDate($date)->age;
@@ -148,9 +188,9 @@ class MiembroController extends Controller
         $rules = [
             'nombre' => 'required',
             'apellido' => 'required',
-            'correo' => 'email|unique:miembros,correo,'.$miembro->id,
+            'correo' => 'email|unique:miembros,correo,' . $miembro->id,
             'fecha_nacimiento' => 'required|date',
-            'ci' => 'nullable|required_if:edad,>,9|unique:miembros,ci,'.$miembro->id,
+            'ci' => 'nullable|required_if:edad,>,9|unique:miembros,ci,' . $miembro->id,
             'edad' => 'required|integer',
             'iglesia_id' => 'required|integer',
             'estado_id' => 'required|integer',
@@ -201,7 +241,6 @@ class MiembroController extends Controller
         return response()->json([
             'data' => $miembro,
         ], 200);
-
     }
 
     public function destroy(Miembros $miembro)

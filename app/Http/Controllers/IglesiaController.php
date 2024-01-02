@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Iglesia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class IglesiaController extends Controller
 {
@@ -13,12 +14,40 @@ class IglesiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $iglesia = Iglesia::all();
-        return response()->json([
-            'data' => $iglesia,
-        ], 200);
+        $columna = $request->columna ?? 'miembros.id';
+        $orden = $request->orden ?? 'asc';
+        $nro = $request->nro ?? 5;
+
+        try {
+            $iglesiasQuery = $request->role_id == 1 ? Iglesia::orderBy($columna, $orden) : Iglesia::orderBy($columna, $orden)->where('user_id', $request->id);
+            if ($request->role_id == 1) {
+                $iglesiasQuery = Iglesia::orderBy($columna, $orden);
+            }else if ($request->role_id == 2) {
+                $iglesiasQuery = Iglesia::orderBy($columna, $orden)->where('user_id', $request->id);
+            }else if ($request->role_id == 3){
+                $iglesia = Iglesia::miembros()->where('id',$request->miembro_id);
+                $iglesiasQuery = Iglesia::orderBy($columna, $orden);
+            }
+
+            if ($request->filtro != "" && $request->valor != "") {
+                $iglesiasQuery->where($request->filtro, 'LIKE', "%{$request->valor}%");
+            }
+
+            $iglesias = $iglesiasQuery->paginate($nro);
+
+            return response()->json([
+                'data' => $iglesias,
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error función iglesia.index: ' . $th->getMessage());
+            Log::error('Archivo: ' . $th->getFile());
+            Log::error('Línea: ' . $th->getLine());
+            return response()->json([
+                'errors'  => 'Estimado usuario, en estos momentos no se puede procesar su solicitud'
+            ], 400);
+        }
     }
 
     /**
@@ -42,7 +71,7 @@ class IglesiaController extends Controller
         $rules = [
             'nombre' => 'required',
             'correo' => 'required|email|unique:iglesias',
-            'fecha_creacion' => 'date',
+            'fecha_creacion' => 'nullable|date',
         ];
 
         $validator = Validator::make($request->all(), $rules);

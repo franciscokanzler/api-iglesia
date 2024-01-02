@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriaSeeder::class);
         $this->call(RangoSeeder::class);
         $this->call(CiudadanoSeeder::class);
+        $this->call(EquiposSedeer::class);
     }
 }

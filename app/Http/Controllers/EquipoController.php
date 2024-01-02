@@ -7,6 +7,7 @@ use App\Models\Iglesia;
 use App\Models\Miembros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class EquipoController extends Controller
 {
@@ -15,15 +16,34 @@ class EquipoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //filtrar equipos por iglesia pendiente
-        $usuario = auth()->id();
-        dd($usuario);
-        $equipos = Equipo::all();
-        return response()->json([
-            'data' => $equipos,
-        ], 200);
+        $columna = $request->columna ?? 'equipos.id';
+        $orden = $request->orden ?? 'asc';
+        $nro = $request->nro ?? 5;
+
+        try {
+            $equiposQuery = Equipo::join('iglesias', 'equipos.iglesia_id', '=', 'iglesias.id')
+                ->select('equipos.*', 'iglesias.nombre as nombre_iglesia')
+                ->orderBy($columna, $orden);
+
+            if ($request->filtro != "" && $request->valor != "") {
+                $equiposQuery->where($request->filtro, 'LIKE', "%{$request->valor}%");
+            }
+
+            $equipos = $equiposQuery->paginate($nro);
+
+            return response()->json([
+                'data' => $equipos,
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('Error función equipo.index: ' . $th->getMessage());
+            Log::error('Archivo: ' . $th->getFile());
+            Log::error('Línea: ' . $th->getLine());
+            return response()->json([
+                'errors'  => 'Estimado usuario, en estos momentos no se puede procesar su solicitud'
+            ], 400);
+        }
     }
 
     /**
@@ -56,6 +76,7 @@ class EquipoController extends Controller
 
         $ErrorMessages = [
             'iglesia_id.exists' => 'El iglesia_id es incorrecto ',
+            'correo.unique' => 'Estimado usuario, el correo ingresado se encuentra en uso',
         ];
 
         $validator = Validator::make($request->all(), $rules, $ErrorMessages);
@@ -92,7 +113,7 @@ class EquipoController extends Controller
      */
     public function edit($id)
     {
-        $equipo = Equipo::where('id',$id)->get();
+        $equipo = Equipo::with('iglesia')->where('id',$id)->first();
         return response()->json([
             'data' => $equipo,
         ], 200);
@@ -110,12 +131,13 @@ class EquipoController extends Controller
         $rules = [
             'descripcion' => 'required|string',
             'nombre' => 'required|unique:equipos',
-            'correo' => 'required|email|unique:equipos',
+            'correo' => 'required|email|unique:equipos,correo,' . $equipo->id,
             'iglesia_id' => 'required|exists:iglesias,id',
         ];
 
         $ErrorMessages = [
             'iglesia_id.exists' => 'El iglesia_id es incorrecto ',
+            'correo.unique' => 'Estimado usuario, el correo ingresado se encuentra en uso',
         ];
 
         $validator = Validator::make($request->all(), $rules, $ErrorMessages);

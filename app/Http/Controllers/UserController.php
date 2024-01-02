@@ -33,6 +33,7 @@ class UserController extends Controller
             $token = $user->createToken('token')->plainTextToken;
             return response()->json([
                 'token' => $token,
+                'user' => $user,
             ], 200);
             /* return response(['token'=>$token],Response::HTTP_OK); */
         }else{
